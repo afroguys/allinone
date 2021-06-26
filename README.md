@@ -11,7 +11,7 @@ This script not belong to me. Just copy from Telegram Channel. Credit to Owner [
 > apt update && apt upgrade -y && update-grub && sleep 2 && reboot
 
 **Step 2**
-> sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.disable_ipv6=1 && apt update && apt install -y bzip2 gzip coreutils screen curl && https://github.com/afroguys/allinone/raw/main/setup.sh && chmod +x setup.sh && screen -S setup ./setup.sh
+> sysctl -w net.ipv6.conf.all.disable_ipv6=1 && sysctl -w net.ipv6.conf.default.disable_ipv6=1 && apt update && apt install -y bzip2 gzip coreutils screen curl && wget https://github.com/afroguys/allinone/raw/main/setup.sh && chmod +x setup.sh && screen -S setup ./setup.sh
 
 This script will doing all the installtion.
 
