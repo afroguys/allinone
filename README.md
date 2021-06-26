@@ -4,8 +4,8 @@ Auto Configure VPN Server. Trojan, IKEv2, Wireguard, OVPN, ShadowSocks, vmess, v
 
 This script not belong to me. Just copy from Telegram Channel. Credit to Owner : t.me/knz17.
 
-Debian 9 & 10
-Ubuntu 18.04 & 20.04
+# Debian 9 & 10
+# Ubuntu 18.04 & 20.04
 
 *Step 1*
 apt update && apt upgrade -y && update-grub && sleep 2 && reboot
