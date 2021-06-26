@@ -15,9 +15,9 @@ This script not belong to me. Just copy from Telegram Channel. Credit to Owner [
 
 This script will doing all the installtion.
 
-
-![photo_2021-06-26_18-36-44](https://user-images.githubusercontent.com/36734490/123510380-ade3b600-d6ad-11eb-8a0a-461d7618a130.jpg)
 ![photo_2021-06-26_18-37-00](https://user-images.githubusercontent.com/36734490/123510383-b0461000-d6ad-11eb-8b9d-13a9ca58c8b6.jpg)
 
+To add user and view all command, use **menu**
 
+![photo_2021-06-26_18-36-44](https://user-images.githubusercontent.com/36734490/123510380-ade3b600-d6ad-11eb-8a0a-461d7618a130.jpg)
 
