@@ -58,3 +58,4 @@ echo ""
 echo -e "\e[44mDetails:\e[0m"
 echo "WebUI: https://$ip:8112 (default password is deluge)"
 echo ""
+reboot
