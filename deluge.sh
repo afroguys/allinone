@@ -12,8 +12,8 @@ echo ""
 echo -e "\e[44mSetting up Systemd\e[0m"
 #cp systemd/deluged.service /etc/systemd/system/
 #cp systemd/deluge-web.service /etc/systemd/system/
-wget https://raw.githubusercontent.com/nwgat/etc/master/deluge/deluged.service -O /etc/systemd/system/deluged.service
-wget https://raw.githubusercontent.com/nwgat/etc/master/deluge/deluge-web.service -O /etc/systemd/system/deluge-web.service
+wget https://raw.githubusercontent.com/afroguys/allinone/main/deluged.service -O /etc/systemd/system/deluged.service
+wget https://raw.githubusercontent.com/afroguys/allinone/main//deluge-web.service -O /etc/systemd/system/deluge-web.service
 echo "Done."
 systemctl daemon-reload
 echo ""
