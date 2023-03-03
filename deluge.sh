@@ -1,4 +1,6 @@
-ip=`(hostname -I | awk '{print $1}')`
+#ip=`(hostname -I | awk '{print $1}')`
+ip='{\"ips\":[\"$(curl -Ss ipv4.icanhazip.com)\"]}'
+
 
 echo ""
 echo -e "\e[44mInstalling Packages\e[0m"
