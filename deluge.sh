@@ -50,6 +50,7 @@ su -c 'deluge-console "config -s max_active_seeding 100"' deluge
 
 systemctl restart deluged
 systemctl start deluge-web && systemctl enable deluge-web
+systemctl status deluged;systemctl status deluge-web
 echo ""
 echo "Deluge is now setup"
 #echo "¤¤¤ WebUI is disabled by defult ¤¤¤"
