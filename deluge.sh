@@ -49,13 +49,13 @@ su -c 'deluge-console "config -s max_active_limit 100"' deluge
 su -c 'deluge-console "config -s max_active_seeding 100"' deluge
 
 systemctl restart deluged
-
+systemctl start deluge-web && systemctl enable deluge-web
 echo ""
 echo "Deluge is now setup"
-echo "¤¤¤ WebUI is disabled by defult ¤¤¤"
-echo "enable with systemctl start deluge-web && systemctl enable deluge-web"
+#echo "¤¤¤ WebUI is disabled by defult ¤¤¤"
+#echo "enable with systemctl start deluge-web && systemctl enable deluge-web"
 echo ""
 echo -e "\e[44mDetails:\e[0m"
 echo "WebUI: https://$ip:8112 (default password is deluge)"
 echo ""
-reboot
+
