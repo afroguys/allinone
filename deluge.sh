@@ -6,6 +6,7 @@ apt-get install -qq software-properties-common -y
 add-apt-repository ppa:deluge-team/stable -y
 apt-get update -qq
 apt-get install -qq deluged deluge-web deluge-console nano wget python3-pip python3-testresources ufw -y
+python3 -m pip install launchpadlib
 pip install -q flexget
 echo ""
 echo -e "\e[44mSetting up Systemd\e[0m"
