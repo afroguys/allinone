@@ -14,7 +14,7 @@ echo -e "\e[44mInstalling Packages\e[0m"
 apt-get install -qq software-properties-common -y
 add-apt-repository ppa:deluge-team/stable -y
 apt-get update -qq
-apt-get install -qq deluged deluge-web deluge-console nano wget python-pip ufw -y
+apt-get install -qq deluged deluge-web deluge-console nano wget python3-pip ufw -y
 pip install -q flexget
 echo ""
 echo -e "\e[44mSetting up Systemd\e[0m"
