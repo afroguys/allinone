@@ -1,14 +1,5 @@
 ip=`(hostname -I | awk '{print $1}')`
 
-#echo ""
-#echo -e "\e[44m## nwgat.ninja deluge installer ##\e[0m"
-#echo "https://nwgat.ninja"
-#echo ""
-#echo -e "\e[44mUsername\e[0m"
-#read -e usr
-#echo -e "\e[44mPassword\e[0m"
-#read -e pw
-
 echo ""
 echo -e "\e[44mInstalling Packages\e[0m"
 apt-get install -qq software-properties-common -y
@@ -65,7 +56,4 @@ echo "enable with systemctl start deluge-web && systemctl enable deluge-web"
 echo ""
 echo -e "\e[44mDetails:\e[0m"
 echo "WebUI: https://$ip:8112 (default password is deluge)"
-#echo "Remote Client: $ip"
-#echo "Username: $usr"
-#echo "Password: $pw"
 echo ""
