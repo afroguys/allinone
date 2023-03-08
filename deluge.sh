@@ -1,5 +1,5 @@
 #ip=`(hostname -I | awk '{print $1}')`
-ip='{\"ips\":[\"$(curl -Ss ipv4.icanhazip.com)\"]}'
+ip='{\"ips\":[\"$(curl -Ss https://ipinfo.io/ip)\"]}'
 
 
 echo ""
