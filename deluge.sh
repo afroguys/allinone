@@ -35,7 +35,7 @@ wget -q https://github.com/JohnDoee/deluge-streaming/releases/download/0.12.2/St
 echo $usr:$pw:10 >> /home/deluge/.config/deluge/auth
 echo "auth added"
 chown deluge /home/deluge/.config/deluge/auth
-chown deluge /home/deluge/.config/deluge/plugins/Streaming-0.7.1-py2.7.egg
+chown deluge /home/deluge/.config/deluge/plugins/Streaming-0.12.2-py2.7.egg
 systemctl start deluged && systemctl enable deluged
 sleep 5
 su -c 'deluge-console "config -s allow_remote True"' deluge
