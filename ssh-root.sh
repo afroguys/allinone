@@ -80,12 +80,5 @@ if [[ ! "$(command -v systemctl)" ]]; then
 fi
 
 echo -e "\nNow check if your SSH are accessible using root\nIP Address: $(wget -4qO- http://ipinfo.io/ip || curl -4sSL http://ipinfo.io/ip)\nSSH Port: $(sudo ss -4tlnp | grep -i "ssh" | awk '{print $4}' | cut -d: -f2 | head -n1)\nRoot Password: $newsshpassh\n"
-cecho -blue "
-     ____             _     ____  _          _ _ 
-    |  _ \ ___   ___ | |_  / ___|| |__   ___| | |
-    | |_) / _ \ / _ \| __| \___ \| '_ \ / _ \ | |
-    |  _ < (_) | (_) | |_   ___) | | | |  __/ | |
-    |_| \_\___/ \___/ \__| |____/|_| |_|\___|_|_|
-  Email: info@google.com Blog: https://google.com"
 }
 exit 0
