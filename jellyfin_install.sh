@@ -1,38 +1,7 @@
 #!/bin/bash
-#install tailscale
-curl -fsSL https://tailscale.com/install.sh | sh
-#set up tailscale for remote access
-sudo tailscale up 
-
-# Check if Tailscale is already authenticated
-if ! tailscale status | grep -q "Authenticating"; then
-  echo "Tailscale is already authenticated."
-else
-  # Open Tailscale login page for authentication
-  tailscale authlogin
-  
-  # Wait for authentication to complete
-  echo "Waiting for authentication..."
-  while tailscale status | grep -q "Authenticating"; do
-    sleep 1
-  done
-  
-  echo "Authentication complete."
-
 # Get the Tailscale IP address
-tailscale_ip=$(tailscale status | grep "IP: " | awk '{print $2}')
-
-#make config file
-sudo mkdir /deletewhenyouseeme
-
-# Specify the file name and path
-file_path="/deletewhenyouseeme/infos.txt"
-
-# Save the IP address to the file
-echo "$tailscale_ip" > "$file_path"
-
-# display a message indicating the IP address has been saved
-echo "Tailscale IP address saved to $file_path."
+#tailscale_ip=$(tailscale status | grep "IP: " | awk '{print $2}')
+ip=$(curl -Ss https://ipinfo.io/ip)
 
 #set up jellyfin
 
@@ -76,12 +45,12 @@ sudo systemctl start jellyfin
 sudo systemctl enable jellyfin
 
 #allow jellyfin port
-sudo ufw allow (port)
+#sudo ufw allow (port)
 
 #check status of jellyfin
 sudo systemctl status jellyfin
 
 
-echo ""Jellyfin is up and running please visit $tailscale_ip to continue the setup process"
+echo ""Jellyfin is up and running please visit $ip to continue the setup process"
 " > "$file_path"
 sudo cat $file_path
