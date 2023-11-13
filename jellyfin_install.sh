@@ -51,6 +51,6 @@ sudo systemctl enable jellyfin
 sudo systemctl status jellyfin
 
 
-echo ""Jellyfin is up and running please visit $ip to continue the setup process"
+echo ""Jellyfin is up and running please visit $ip:8096 to continue the setup process"
 " > "$file_path"
 sudo cat $file_path
