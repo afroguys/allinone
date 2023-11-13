@@ -260,7 +260,7 @@ echo
 echo "You can access your new instance now at http://${IP_ADDRESS}:8096 in your web browser to finish setting up Jellyfin."
 echo
 echo "Thank you for installing Jellyfin, and happy watching!"
-echo
+echo "Support My Github Page. Thank you"
 
 # Explicitly exit cleanly
 exit 0
