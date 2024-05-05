@@ -1,6 +1,9 @@
 #!/bin/bash
 if [ "${EUID}" -ne 0 ]; then
 		echo "You need to run this script as root"
+  		echo "This script no longer maintain. Use at ownrisk"
+    		echo "VPN-OpenWRT-"
+
 		exit 1
 fi
 if [ "$(systemd-detect-virt)" == "openvz" ]; then
