@@ -94,31 +94,32 @@ install_plex() {
 
 # Main menu
 main_menu() {
-    echo "Choose an option to install:"
-    echo "1. Install Deluge"
-    echo "2. Install Rclone"
-    echo "3. Install Plex Media Server"
-    echo "4. Exit"
-    read -p "Enter your choice [1-4]: " choice
+    while true; do
+        echo "Choose an option to install:"
+        echo "1. Install Deluge"
+        echo "2. Install Rclone"
+        echo "3. Install Plex Media Server"
+        echo "4. Exit"
+        read -p "Enter your choice [1-4]: " choice
 
-    case $choice in
-        1)
-            install_deluge
-            ;;
-        2)
-            install_rclone
-            ;;
-        3)
-            install_plex
-            ;;
-        4)
-            exit 0
-            ;;
-        *)
-            echo "Invalid option. Please try again."
-            main_menu
-            ;;
-    esac
+        case $choice in
+            1)
+                install_deluge
+                ;;
+            2)
+                install_rclone
+                ;;
+            3)
+                install_plex
+                ;;
+            4)
+                exit 0
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                ;;
+        esac
+    done
 }
 
 # Script execution starts here
