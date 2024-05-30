@@ -111,4 +111,17 @@ main_menu() {
         3)
             install_plex
             ;;
-       
+        4)
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please try again."
+            main_menu
+            ;;
+    esac
+}
+
+# Script execution starts here
+check_root
+check_os
+main_menu
