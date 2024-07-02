@@ -5,7 +5,7 @@ TELEGRAM_TOKEN="YOUR_TELEGRAM_BOT_TOKEN"
 PLEX_TOKEN="YOUR_PLEX_TOKEN"
 PLEX_URL="http://localhost:32400"
 QB_USERNAME="admin"
-QB_PASSWORD="adminadmin"
+QB_PASSWORD="adminadmin"  # It's recommended to change this after setup
 DOWNLOAD_PATH="/home/$USER/Downloads"
 CATEGORIES_PATH="/home/$USER/Categories"
 PLEX_CATEGORIES=("movies" "tv_shows")
@@ -13,10 +13,36 @@ SERVER_DOMAIN="your_server_domain_or_ngrok_url"
 
 # === Update and Install Necessary Software ===
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3 python3-pip qbittorrent-nox curl jq
+sudo apt install -y python3 python3-pip curl jq
 
-# === Enable and Start qBittorrent-nox ===
+# Install qBittorrent-nox (Ensure the source is reliable)
+sudo apt install -y qbittorrent-nox
+
+# === Create qBittorrent-nox Service File ===
+cat <<EOL | sudo tee /etc/systemd/system/qbittorrent-nox.service
+[Unit]
+Description=qBittorrent Command Line Client
+Documentation=man:qbittorrent-nox(1) https://github.com/qbittorrent/qBittorrent
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/qbittorrent-nox --webui-port=8080
+Restart=on-failure
+User=$USER
+Group=$USER
+UMask=002
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# === Reload systemd daemon to recognize the new service ===
+sudo systemctl daemon-reload
+
+# === Enable the qBittorrent-nox service to start on boot ===
 sudo systemctl enable qbittorrent-nox
+
+# === Start the qBittorrent-nox service immediately ===
 sudo systemctl start qbittorrent-nox
 
 # === Install Python Libraries ===
@@ -39,11 +65,25 @@ else
 fi
 
 # Set preferences including username and password
-preferences_response=$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/app/setPreferences" -d '{"save_path":"'${DOWNLOAD_PATH}'", "web_ui_username":"'${QB_USERNAME}'", "web_ui_password":"'${QB_PASSWORD}'"}')
+preferences_json=$(cat <<EOF
+{
+    "save_path": "$DOWNLOAD_PATH",
+    "web_ui_username": "$QB_USERNAME",
+    "web_ui_password": "$(echo -n "$QB_PASSWORD" | md5sum | awk '{print $1}')"
+}
+EOF
+)
+
+echo "Sending preferences JSON: $preferences_json"
+
+preferences_response=$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/app/setPreferences" -d "$preferences_json")
+
+echo "Preferences response: $preferences_response"
+
 if [[ $preferences_response == *"Ok"* ]]; then
     echo "Preferences set successfully."
 else
-    echo "Failed to set preferences."
+    echo "Failed to set preferences. Response: $preferences_response"
     exit 1
 fi
 
@@ -92,7 +132,7 @@ add_torrent() {
     torrent_id=\$(echo "\$torrent_response" | jq -r '.[0].hash')
 
     if [ -z "\$torrent_id" ]; then
-        echo "Failed to add torrent."
+        echo "Failed to add torrent. Response: \$torrent_response"
         return 1
     fi
 
@@ -116,7 +156,7 @@ move_to_category() {
     file_path=\$(echo "\$files_response" | jq -r '.[0].name')
 
     if [ -z "\$file_path" ]; then
-        echo "Failed to get file path."
+        echo "Failed to get file path. Response: \$files_response"
         return 1
     fi
 
