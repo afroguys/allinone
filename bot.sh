@@ -23,10 +23,31 @@ sudo systemctl start qbittorrent-nox
 pip3 install python-telegram-bot qbittorrent-api requests
 
 # === Configure qBittorrent ===
+echo "Starting qBittorrent..."
 sudo pkill qbittorrent-nox
 qbittorrent-nox --webui-port=8080 & sleep 10
-curl -s --cookie-jar /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/auth/login" -d "username=admin&password=adminadmin"
-curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/app/setPreferences" -d '{"save_path":"'${DOWNLOAD_PATH}'", "web_ui_username":"'${QB_USERNAME}'", "web_ui_password":"'${QB_PASSWORD}'"}'
+
+echo "Configuring qBittorrent..."
+# Perform login and capture cookies
+login_response=$(curl -s --cookie-jar /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/auth/login" -d "username=admin&password=adminadmin")
+
+if [[ $login_response == *"Ok"* ]]; then
+    echo "Login successful."
+else
+    echo "Login failed. Check Web UI access and credentials."
+    exit 1
+fi
+
+# Set preferences including username and password
+preferences_response=$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/app/setPreferences" -d '{"save_path":"'${DOWNLOAD_PATH}'", "web_ui_username":"'${QB_USERNAME}'", "web_ui_password":"'${QB_PASSWORD}'"}')
+if [[ $preferences_response == *"Ok"* ]]; then
+    echo "Preferences set successfully."
+else
+    echo "Failed to set preferences."
+    exit 1
+fi
+
+# Restart qBittorrent with new settings
 pkill qbittorrent-nox
 qbittorrent-nox --webui-port=8080 &
 
@@ -63,10 +84,22 @@ add_torrent() {
     local magnet_link=\$1
     local category=\$2
 
+    echo "Logging into qBittorrent..."
     curl -s --cookie-jar /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/auth/login" -d "username=\$QB_USERNAME&password=\$QB_PASSWORD"
-    torrent_id=\$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/torrents/add" -F "urls=\$magnet_link" -F "savepath=\$DOWNLOAD_PATH" -F "category=\$category" | jq -r '.[0].hash')
 
-    for file_id in \$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X GET "http://localhost:8080/api/v2/torrents/files?hash=\$torrent_id" | jq -r '.[] | select(.name | endswith(".mp4") or endswith(".mkv") or endswith(".avi")) | .id'); do
+    echo "Adding torrent..."
+    torrent_response=\$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/torrents/add" -F "urls=\$magnet_link" -F "savepath=\$DOWNLOAD_PATH" -F "category=\$category")
+    torrent_id=\$(echo "\$torrent_response" | jq -r '.[0].hash')
+
+    if [ -z "\$torrent_id" ]; then
+        echo "Failed to add torrent."
+        return 1
+    fi
+
+    echo "Selecting movie files only..."
+    files_response=\$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X GET "http://localhost:8080/api/v2/torrents/files?hash=\$torrent_id")
+    file_ids=\$(echo "\$files_response" | jq -r '.[] | select(.name | endswith(".mp4") or endswith(".mkv") or endswith(".avi")) | .id')
+    for file_id in \$file_ids; do
         curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/torrents/filePrio" -d "hash=\$torrent_id&priority=1&id=\$file_id"
     done
 
@@ -78,9 +111,16 @@ move_to_category() {
     local torrent_id=\$1
     local category=\$2
 
-    local file_path=\$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X GET "http://localhost:8080/api/v2/torrents/files?hash=\$torrent_id" | jq -r '.[0].name')
-    mv "\$DOWNLOAD_PATH/\$file_path" "\${CATEGORIES_PATH}/\$category/"
+    echo "Moving files to category..."
+    files_response=\$(curl -s --cookie /tmp/qbittorrent-cookie.txt -X GET "http://localhost:8080/api/v2/torrents/files?hash=\$torrent_id")
+    file_path=\$(echo "\$files_response" | jq -r '.[0].name')
 
+    if [ -z "\$file_path" ]; then
+        echo "Failed to get file path."
+        return 1
+    fi
+
+    mv "\$DOWNLOAD_PATH/\$file_path" "\${CATEGORIES_PATH}/\$category/"
     curl -s --cookie /tmp/qbittorrent-cookie.txt -X POST "http://localhost:8080/api/v2/torrents/delete" -d "hashes=\$torrent_id"
 }
 EOL
