@@ -278,3 +278,4 @@ chmod +x /home/$USER/config.sh /home/$USER/qbit_client.sh /home/$USER/plex_clien
 
 # === Start the Telegram Bot ===
 /home/$USER/telegram_bot.sh
+# === still cannot run, got some error. Anyone can fix it?? ===
